@@ -3,9 +3,11 @@ setlocal enabledelayedexpansion
 
 set "dirPath=%~dp0"
 
-for /r "%dirPath%" %%f in (*.jpg, *.jpeg, *.png, *.bmp, *.gif) do (
-    echo Deleting "%%f"
-    del "%%f"
+for /r "%dirPath%" %%f in (*.jpg, *.jpeg, *.png, *.bmp, *.gif, *.zip, *.csv, *.mp4) do (
+    if /i not "!filePath!" == "%dirPath%.git\" (
+        echo Deleting "%%f"
+        del "%%f"
+    )
 )
 
 echo All image files have been deleted.
