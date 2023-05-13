@@ -31,3 +31,8 @@ attention_weights
 hun_eng*
 source_tokenizer.json
 target_tokenizer.json
+
+venv/
+wiki_crawl.py
+*.DS_Store
+temp.html
