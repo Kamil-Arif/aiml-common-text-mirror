@@ -3,28 +3,40 @@ from bs4 import BeautifulSoup
 import hashlib
 from urllib.parse import urlparse
 import os 
+
+"""
+This code is incredibly, unbelievably janky
+HOWEVER.
+It works.
+Arguably.
+"""
+
 visited = []
 
-def get_unique_file_name(url: str):
-    path = url.split("//")[1].split('/')
-    if ':' in path[-1]:
-        return url[7:] #intentionally cause an error
-    if '.' not in path[-1]:
+def get_unique_file_name(url: str, base_url):
+    split_path = url.split("//")[1].split('/')
+
+    if ':' in split_path[-1]:
+        raise Exception("Invalid URL")
+    if '#' == split_path[-1][0]:
+        raise Exception("Invalid URL: Element ID")
+    if '.' not in split_path[-1]:
         hashed_url = hashlib.sha256(url.encode()).hexdigest()
-        path.append(f"index_{hashed_url}.html")
-    path = '/'.join(path[:-1])
+        split_path.append(f"index_{hashed_url}.html")
+
+    path = '/'.join(split_path[:-1])
     if len(path) == 0:
-        if os.path.exists(os.path.join("pantelis.github.io", "index.html")):
-            return os.path.join("pantelis.github.io", "index.html")
+        if os.path.exists(os.path.join(base_url, "index.html")):
+            return os.path.join(base_url, "index.html")
         else:
             hashed_url = hashlib.sha256(url.encode()).hexdigest()
-            return os.path.join("pantelis.github.io", f"misc_page_{hashed_url}.html")
+            return os.path.join(base_url, f"misc_page_{hashed_url}.html")
     if not os.path.isdir(path):
         os.makedirs(path, exist_ok=True)
-    return url.split("//")[1]
+    return '/'.join(split_path)
 
 def get_links(url, depth, base_url):
-    if 'pantelis.github.io' not in url or len(url) == 0:
+    if base_url not in url or len(url) == 0:
         return []
     if url in visited:
         return [url]
@@ -38,16 +50,13 @@ def get_links(url, depth, base_url):
         return []
     
     visited.append(url)
-
-    file_path = get_unique_file_name(url)
+    
     try:
-        if os.path.exists(file_path):
-            print(f"File for {url} already exists.")
-        else:
-            with open(file_path, "w", encoding='utf-8') as file:
-                file.write(response.text)
+        file_path = get_unique_file_name(url, base_url)
+        with open(file_path, "w", encoding='utf-8') as file:
+            file.write(response.text)
     except Exception as e:
-        print(f"Failed to write file {file_path} for {url}. This might not be a bad thing.")
+        print(f"Failed to write file for {url}. This might not be a bad thing.")
 
     # Find all anchor tags and extract the href attribute
     links = [link.get('href') for link in soup.find_all('a')]
@@ -87,7 +96,7 @@ def get_links(url, depth, base_url):
             print(f" - {depth} // {i} : {len(final_links)}")
         return list(set(final_links))
 
-all_links = get_links('https://pantelis.github.io/data-mining/intro.html', 2, 'https://pantelis.github.io')
+all_links = get_links('https://pantelis.github.io/data-mining/intro.html', 2, 'https://pantelis.github.io/data-mining')
 all_links = get_links('https://pantelis.github.io', 2, 'https://pantelis.github.io')
 all_links = list(set(all_links))
 # Print the links

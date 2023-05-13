@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.80.0" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CS301 Introduction to Data Science #  Visualizing NYC Taxi Dropoffs
+What this course is all about #  This course is all about making you love data science. Data science is by definition is multidisciplinary area as you will be dealing with problems that exist in a specific vertical / industry and you ought to understand what the data mean for each domain. In this course we will challenge you with exciting data-intensive problems and teach you from the ground up the concepts that will allow you to capture, transform, model and report in Python notebooks their solutions.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="CS301 Introduction to Data Science" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://pantelis.github.io/cs301/docs/" />
+
+<title>CS301 Introduction to Data Science | CS-301</title>
+<link rel="manifest" href="/cs301/manifest.json">
+<link rel="icon" href="/cs301/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/cs301/book.min.854d83a6ea1a0bc913124cf504daca06b432b7f3e8d25cd3af2b6c9bdbcabed5.css" integrity="sha256-hU2DpuoaC8kTEkz1BNrKBrQyt/Po0lzTrytsm9vKvtU=">
+<script defer src="/cs301/en.search.min.7754c2475285aa372176fb9178ab6a139e0812df0ea415fde75cfbbb67c6f914.js" integrity="sha256-d1TCR1KFqjchdvuReKtqE54IEt8OpBX951z7u2fG&#43;RQ="></script>
+<link rel="alternate" type="application/rss+xml" href="http://pantelis.github.io/cs301/docs/index.xml" title="CS-301" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/cs301"><img src="/cs301/njit_logo.png" alt="Logo" /><span>CS-301</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+<p><a href="/cs301/docs/syllabus/"><strong>Syllabus</strong></a></p>
+</li>
+<li>
+<p><strong>Topics</strong></p>
+<ul>
+<li>
+<p><a href="/cs301/docs/common/lectures/data-mining-intro/"><strong>Introduction to Data Science</strong></a></p>
+<ul>
+<li><a href="/cs301/docs/common/lectures/ai-intro/course-introduction/">Course Introduction</a></li>
+<li><a href="/cs301/docs/common/lectures/ai-intro/data-science-360/">Data Science 360</a></li>
+<li><a href="/cs301/docs/common/lectures/ai-intro/pipelines/">Pipelines</a></li>
+<li><a href="/cs301/docs/common/lectures/uber-ml-arch-case-study/">Uber Case Study</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Probabilistic Learning</strong></p>
+<ul>
+<li><a href="/cs301/docs/common/lectures/ml-math/probability/">Probability Basics</a></li>
+<li><a href="/cs301/docs/common/lectures/entropy/">Entropy</a></li>
+<li><a href="/cs301/docs/common/lectures/pgm/bayesian-inference/">Bayesian Inference</a></li>
+<li><a href="/cs301/docs/common/lectures/classification/covid19-antibody-test/">Interpreting Test Outcomes</a></li>
+<li><a href="/cs301/docs/common/lectures/pgm/bayesian-coin/">Bayesian Coins</a></li>
+</ul>
+</li>
+<li>
+<p><a href="/cs301/docs/common/lectures/learning-problem/"><strong>The Learning Problem</strong></a></p>
+<ul>
+<li><a href="/cs301/docs/common/lectures/regression/linear-regression/">Linear Regression</a></li>
+<li><a href="/cs301/docs/common/lectures/regression/linear-regression/regression-notebooks/">Regression Notebooks</a></li>
+<li><a href="/cs301/docs/common/lectures/optimization/sgd/">Stochastic Gradient Descent</a></li>
+</ul>
+</li>
+<li>
+<p><a href="/cs301/docs/common/lectures/classification/"><strong>Classification</strong></a></p>
+<ul>
+<li><a href="/cs301/docs/common/lectures/classification/classification-intro/">Introduction to Classification</a></li>
+<li><a href="/cs301/docs/common/lectures/classification/perceptron/">Perceptron</a></li>
+<li><a href="/cs301/docs/common/lectures/classification/logistic-regression/">Logistic Regression</a></li>
+<li><a href="https://mybinder.org/v2/gh/pantelis-classes/handson-ml2/blob/master/03_classification.ipynb/HEAD">Classification Lab</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Trees and Intelligence of the Crowds</strong></p>
+</li>
+<li>
+<p><a href="/cs301/docs/common/lectures/decision-trees/">Decision Trees</a></p>
+</li>
+<li>
+<p><a href="/cs301/docs/common/lectures/ensemble/">Ensemble Methods</a></p>
+<ul>
+<li><a href="/cs301/docs/common/lectures/ensemble/random-forests/">Random Forests</a></li>
+<li><a href="/cs301/docs/common/lectures/ensemble/boosting/">Boosting</a>
+<ul>
+<li><a href="/cs301/docs/common/lectures/ensemble/boosting-workshop/">Boosting workshop</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Non-Parametric Methods</strong></p>
+<ul>
+<li><a href="/cs301/docs/common/lectures/unsupervised/k-means/">K-means Clustering</a></li>
+<li><a href="/cs301/docs/common/lectures/density-estimation/knn/">kNN Density Estimation</a>
+<ul>
+<li><a href="/cs301/docs/common/lectures/density-estimation/knn-workshop/">kNN Workshop</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Neural Networks</strong></p>
+<ul>
+<li><a href="/cs301/docs/common/lectures/classification/perceptron/">Perceptron</a></li>
+<li><a href="/cs301/docs/common/lectures/dnn/dnn-intro/">Introduction to Neural Networks</a></li>
+<li><a href="https://playground.tensorflow.org/#activation=tanh&amp;batchSize=10&amp;dataset=circle&amp;regDataset=reg-plane&amp;learningRate=0.03&amp;regularizationRate=0&amp;noise=0&amp;networkShape=4,2&amp;seed=0.08286&amp;showTestData=false&amp;discretize=false&amp;percTrainData=50&amp;x=true&amp;y=true&amp;xTimesY=false&amp;xSquared=false&amp;ySquared=false&amp;cosX=false&amp;sinX=false&amp;cosY=false&amp;sinY=false&amp;collectStats=false&amp;problem=classification&amp;initZero=false&amp;hideText=false">Neural Network Playground</a></li>
+<li><a href="/cs301/docs/common/lectures/dnn/backprop-intro/">Introduction to back propagation</a></li>
+<li><a href="/cs301/docs/common/lectures/dnn/backprop-dnn/">Backpropagation in DNNs</a>
+<ul>
+<li><a href="/cs301/docs/common/lectures/dnn/backpropagation-dnn-exercises/">Backpropagation Exercises</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="/cs301/docs/common/lectures/dnn/fashion-mnist-case-study/">Fashion MNIST Case Study</a></p>
+</li>
+<li>
+<p><a href="/cs301/docs/common/lectures/cnn/cnn-intro/">Introduction to CNNs</a></p>
+</li>
+<li>
+<p><a href="/cs301/docs/common/lectures/cnn/cnn-layers/">CNN Layers</a></p>
+</li>
+<li>
+<p><a href="/cs301/docs/common/lectures/cnn/cnn-example-architectures/">CNN Example Architectures</a></p>
+</li>
+<li>
+<p><a href="/cs301/docs/common/lectures/cnn/cnn-example-architectures/cnn-classification-workshop/">CNN Classification Workshop</a></p>
+</li>
+<li>
+<p><strong>Dimensionality Reduction</strong></p>
+<ul>
+<li><a href="http://pantelis.github.io/cs301/docs/common/lectures/recommenders/recommenders-intro/">Netflix Recommendations</a></li>
+<li><a href="http://pantelis.github.io/cs301/docs/common/lectures/recommenders/netflix/">The SVD-based Solution</a></li>
+<li><a href="http://pantelis.github.io/cs301/docs/common/lectures/pca/">Principal Component Analysis (PCA)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Background in Python and Linear Algebra</strong></p>
+<ul>
+<li>CS100 Python Resources (in Canvas)</li>
+<li>Linear Algebra
+<ul>
+<li><a href="/cs301/docs/common/lectures/linear-algebra/vectors/">Vectors</a></li>
+<li><a href="/cs301/docs/common/lectures/linear-algebra/matrices/">Matrices</a></li>
+<li><a href="/cs301/docs/common/lectures/ml-math/calculus/">Calculus</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="/cs301/docs/common/resources/"><strong>Resources</strong></a></p>
+<ul>
+<li><a href="/cs301/docs/common/resources/environment/">Programming Environment</a></li>
+<li><a href="/cs301/docs/common/lectures/python/">Learn Python</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Assignments / Projects</strong></p>
+<ul>
+<li><a href="/cs301/docs/common/assignments/probability-assignment/">Probability Theory Assignment</a></li>
+<li><a href="/cs301/docs/common/assignments/mle-poisson-assignment/">MLE Assignment - YouTube Visitors</a></li>
+<li><a href="/cs301/docs/common/assignments/neural-networks/">Neural Networks Assignment</a></li>
+<li><a href="/cs301/docs/common/projects/learning-in-simulated-worlds/">Learning in Simulated Worlds Project (RTX)</a></li>
+<li><a href="/cs301/docs/common/projects/">Project Proposal Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/cs301/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>CS301 Introduction to Data Science</strong>
+
+  <label for="toc-control">
+    
+    <img src="/cs301/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#cs301-introduction-to-data-science">CS301 Introduction to Data Science</a>
+      <ul>
+        <li><a href="#what-this-course-is-all-about">What this course is all about</a></li>
+        <li><a href="#logistics">Logistics</a></li>
+        <li><a href="#instructor">Instructor</a></li>
+        <li><a href="#tagrader">TA/Grader</a></li>
+        <li><a href="#grading">Grading</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="cs301-introduction-to-data-science">
+  CS301 Introduction to Data Science
+  <a class="anchor" href="#cs301-introduction-to-data-science">#</a>
+</h1>
+<p><img src="./taxi-dropoffs.png#center" alt="heartflow" />
+<em>Visualizing NYC Taxi Dropoffs</em></p>
+<h2 id="what-this-course-is-all-about">
+  What this course is all about
+  <a class="anchor" href="#what-this-course-is-all-about">#</a>
+</h2>
+<p>This course is all about making you love data science. Data science is by definition is multidisciplinary area as you will be dealing with problems that exist in a specific vertical / industry and you ought to understand what the data mean for each domain.  In this course we will challenge you with exciting data-intensive problems and teach you from the ground up the concepts that will allow you to capture, transform, model and report in Python notebooks their solutions.  The iterative nature of data science is to perhaps the most important meta-pattern - you need to learn how to iterate efficiently. This course requires some intensive effort from your side in both learning these concepts and practicing them in your assigned projects. We hope that we will motivate you to work hard and have some fun along the way.</p>
+<h2 id="logistics">
+  Logistics
+  <a class="anchor" href="#logistics">#</a>
+</h2>
+<p><strong>Time/location:</strong></p>
+<p>Course Dates: Sept 1/2 - Dec 15/16, 2021</p>
+<p>CS301-101: Wed 6pm EST,  Central King Building 106</p>
+<p>CS301-103: Thu 6pm EST,  Central King Building 317</p>
+<p><strong>Communication:</strong>
+We use Slack for all communications: announcements and questions related to lectures and projects. Slack info has already been sent to you via Canvas. Please install Slack in your smartphones as well.</p>
+<p><strong>Office Hours</strong>
+Office hours will be coordinated via Slack as well - the process is simple: direct message and make arrangements for a 30min slot. After we agree on the slot, please send a <strong>GMeet calendar</strong> invitation to me. Include in your invitation the questions / issues you face so that we can have a productive meeting.</p>
+<h2 id="instructor">
+  Instructor
+  <a class="anchor" href="#instructor">#</a>
+</h2>
+<p>Pantelis Monogioudis, Ph.D</p>
+<p>Professor of Practice, NJIT &amp; Adjunct NYU</p>
+<h2 id="tagrader">
+  TA/Grader
+  <a class="anchor" href="#tagrader">#</a>
+</h2>
+<p>CS301-101:TBP</p>
+<p>CS301-103: TBP</p>
+<h2 id="grading">
+  Grading
+  <a class="anchor" href="#grading">#</a>
+</h2>
+<ol>
+<li>Midterm (20%)</li>
+<li>Final (30%)</li>
+<li>Project (20%)</li>
+<li>Assignments (30%)</li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+  <div><a class="flex align-center" href="https://github.com/pantelis/cs301/commit/58763e7fcce0c7bca9ea22d34a67d5683615dcd9" title='Last modified by Pantelis Monogioudis | Sep 1, 2021' target="_blank" rel="noopener">
+      <img src="/cs301/svg/calendar.svg" class="book-icon" alt="Calendar" />
+      <span>Sep 1, 2021</span>
+    </a>
+  </div>
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/pantelis/cs301/edit/master/content//docs/_index.md" target="_blank" rel="noopener">
+      <img src="/cs301/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#cs301-introduction-to-data-science">CS301 Introduction to Data Science</a>
+      <ul>
+        <li><a href="#what-this-course-is-all-about">What this course is all about</a></li>
+        <li><a href="#logistics">Logistics</a></li>
+        <li><a href="#instructor">Instructor</a></li>
+        <li><a href="#tagrader">TA/Grader</a></li>
+        <li><a href="#grading">Grading</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  <!DOCTYPE html> 
+
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css"
+  integrity="sha384-BdGj8xC2eZkQaxoQ8nSLefg4AV4/AwB3Fj+8SUSo7pnKP6Eoy18liIKTPn9oBYNG"
+  crossorigin="anonymous">
+
+<script defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.js"
+  integrity="sha384-JiKN5O8x9Hhs/UE5cT5AAJqieYlOZbGT3CHws/y97o3ty4R7/O5poG9F3JoiOYw1"
+  crossorigin="anonymous"></script>
+
+<script defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/contrib/auto-render.min.js"
+  integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI"
+  crossorigin="anonymous" onload="renderMathInElement(document.body);">
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false}
+      ],
+      macros: {
+        
+        "\\pdata": "p_{data}",
+        
+        "\\ptrain": "\\hat{p}_{data}",
+        "\\Ptrain": "\\hat{P}_{data}",
+        
+        "\\pmodel": "p_{model}",
+        "\\Pmodel": "P_{model}",
+        "\\ptildemodel": "\tilde p_{model}",
+        
+        "\\pencode": "p_{encoder}",
+        "\\pdecode": "p_{decoder}",
+        "\\precons": "p_{reconstruct}"
+      }
+    });
+  });
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"
+          integrity="sha256-F/Xda58SPdcUCr+xhSGz9MA2zQBPb0ASEYKohl8UCHc=" crossorigin="anonymous">
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.css">
+<script src="https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.js"></script>
+
+<script>
+  pseudocode.renderElement(document.getElementById("forward-search"));
+</script>
+
+
+</html>
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

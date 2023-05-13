@@ -1,0 +1,1587 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Using convnets with small datasets &#8212; Data Mining</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../_static/copybutton.js"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../../../_static/tabs.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../_static/sphinx-thebe.js"></script>
+    <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'aiml-common/lectures/cnn/cnn-example-architectures/using_convnets_with_small_datasets';</script>
+    <link rel="canonical" href="https://pantelis.github.io/data-mining/aiml-common/lectures/cnn/cnn-example-architectures/using_convnets_with_small_datasets.html" />
+    <link rel="shortcut icon" href="../../../../_static/logo.ico"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Feature Extraction via Residual Networks" href="../../scene-understanding/feature-extraction-resnet/index.html" />
+    <link rel="prev" title="CNN Example Architectures" href="_index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../intro.html">
+                    Data Mining
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Syllabus</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../syllabus/_index.html">Syllabus</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to Data Mining</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../ai-intro/course-introduction/_index.html">Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai-intro/data-science-360/_index.html">Data Science 360</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../ai-intro/pipelines/_index.html">Pipelines</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../uber-ml-arch-case-study/_index.html">A Case Study of an ML Architecture - Uber</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../ai-intro/pipelines/02_end_to_end_machine_learning_project.html">Setup</a></li>
+
+
+
+
+
+
+
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">The Learning Problem</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../learning-problem/_index.html">The Learning Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../regression/linear-regression/linear_regression.html">Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../regression/linear-regression/regression-notebooks.html">Regression Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization/maximum-likelihood/marginal_maximum_likelihood.html">Maximum Likelihood Estimation of a marginal model</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../../optimization/maximum-likelihood/conditional_maximum_likelihood.html">Maximum Likelihood (ML) Estimation of conditional models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../entropy/_index.html">Entropy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization/sgd/_index.html">Stochastic Gradient Descent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classification/classification-intro/_index.html">Introduction to Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classification/logistic-regression/_index.html">Logistic Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Deep Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../classification/perceptron/_index.html">The Neuron (Perceptron)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dnn/dnn-intro/_index.html">Deep Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dnn/backprop-intro/_index.html">Introduction to Backpropagation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dnn/backprop-dnn/_index.html">Backpropagation in Deep Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dnn/backprop-dnn-exercises/_index.html">Backpropagation DNN exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dnn/fashion-mnist-case-study.html">Fashion MNIST Case Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimization/regularization/_index.html">Regularization in Deep Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolutional Neural Networks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cnn-intro/_index.html">Introduction to Convolutional Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cnn-layers/_index.html">CNN Architectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_index.html">CNN Example Architectures</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Using convnets with small datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scene-understanding/feature-extraction-resnet/index.html">Feature Extraction via Residual Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Transfer Learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../transfer-learning/transfer-learning-introduction.html">Introduction to Transfer Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../transfer-learning/transfer_learning_tutorial.html">Transfer Learning for Computer Vision Tutorial</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Scene Understanding</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../scene-understanding/scene-understanding-intro/index.html">Introduction to Scene Understanding</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../scene-understanding/object-detection/object-detection-intro/index.html">Object Detection</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../scene-understanding/object-detection/detection-metrics/index.html">Object Detection and Semantic Segmentation Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../scene-understanding/object-detection/rcnn-object-detection/index.html">Region-CNN (RCNN) Object Detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../scene-understanding/object-detection/faster-rcnn-object-detection/index.html">Fast and Faster RCNN Object Detection</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Sequences and RNNs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../rnn/introduction/_index.html">Introduction to Recurrent Neural Networks (RNN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rnn/simple-rnn/_index.html">Simple RNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rnn/lstm/_index.html">The Long Short-Term Memory (LSTM) Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rnn/time_series_using_simple_rnn_lstm.html">Time Series Prediction using RNNs</a></li>
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Natural Language Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../nlp/nlp-introduction/nlp-pipelines/_index.html">Introduction to NLP Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nlp/nlp-introduction/tokenization/index.html">Tokenization</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../nlp/nlp-introduction/word2vec/_index.html">Embeddings</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nlp/nlp-introduction/word2vec/word2vec_from_scratch.html">Word2Vec from scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nlp/nlp-introduction/word2vec/word2vec_tensorflow_tutorial.html">Word2Vec Tensorflow Tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../nlp/language-models/_index.html">Language Models</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nlp/language-models/cnn-language-model/index.html">CNN Language Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nlp/language-models/simple-rnn-language-model/index.html">Simple RNN Language Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nlp/language-models/lstm-language-model/index.html">LSTM Language Model from scratch</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../nlp/nmt/nmt-intro/index.html">Neural Machine Translation</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nlp/nmt/nmt-metrics/index.html">NMT Metrics  - BLEU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nlp/nmt/rnn-nmt-attention/index.html">Attention in RNN-based NMT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nlp/nmt/rnn-attention-workshop/seq2seq_and_attention.html">Attention in RNN NMT Workshop</a></li>
+
+
+
+
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../nlp/transformers/transformers-intro.html">Transformers</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nlp/transformers/annotated_transformer.html">The Annotated Transformer</a></li>
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Structured Data Methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../decision-trees/_index.html">Decision Trees</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../regression-trees/regression_trees.html">Regression tree stumps</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../../ensemble/_index.html">Ensemble Methods </a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ensemble/random-forests/_index.html">Random Forests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ensemble/adaboost/index.html">Adaptive Boosting (AdaBoost)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ensemble/gradient-boosting/index.html">Gradient Boosting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ensemble/boosting-workshop/_index.html">Boosting workshop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Non-Parametric Methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../unsupervised/k-means/_index.html">K-means Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../density-estimation/knn/_index.html">k-Nearest Neighbors (kNN) Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../density-estimation/knn-workshop/_index.html">kNN Workshop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Dimensionality Reduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../pca/_index.html">Principal Component Analysis (PCA)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Math Background</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../ml-math/index.html">Math for ML Textbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ml-math/probability/index.html">Probability Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ml-math/linear-algebra/index.html">Linear Algebra for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ml-math/calculus/index.html">Calculus</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../resources/environment/index.html">Your Programming Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../resources/environment/assignment-submission.html">Submitting Your Assignment / Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Learn Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../resources/environment/notebook-status.html">Notebook execution status</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../assignments/probability/probability-assignment-5/index.html">Probability Assignment</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../../../assignments/mle/poisson-regression-1/index.html">Bike Rides and the Poisson Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../assignments/cnn-face-similarity/index.html">CNN Featurizers and Similarity Search</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project (CS482)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../projects/nlp/finetuning-language-models-tweets/index.html">Finetuning Language Models - Toxic Tweets</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project (CS634)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../projects/nlp/finetuning-language-models-patents/index.html">Finetuning Language Models - Can I Patent This?</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pantelis/data-mining/master?urlpath=tree/data_mining/aiml-common/lectures/cnn/cnn-example-architectures/using_convnets_with_small_datasets.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../../../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/pantelis/data-mining/blob/master/data_mining/aiml-common/lectures/cnn/cnn-example-architectures/using_convnets_with_small_datasets.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pantelis/data-mining" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pantelis/data-mining/edit/master/data_mining/aiml-common/lectures/cnn/cnn-example-architectures/using_convnets_with_small_datasets.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pantelis/data-mining/issues/new?title=Issue%20on%20page%20%2Faiml-common/lectures/cnn/cnn-example-architectures/using_convnets_with_small_datasets.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../../_sources/aiml-common/lectures/cnn/cnn-example-architectures/using_convnets_with_small_datasets.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Using convnets with small datasets</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-a-convnet-from-scratch-on-a-small-dataset">Training a convnet from scratch on a small dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-relevance-of-deep-learning-for-small-data-problems">The relevance of deep learning for small-data problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-the-data">Downloading the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-our-network">Building our network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-data-augmentation">Using data augmentation</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p><a class="reference external" href="https://colab.research.google.com/github/pantelis/aiml-common/blob/master/lectures/cnn/cnn-example-architectures/using_convnets_with_small_datasets.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>This notebook is by F. Chollet and is included in his book.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">keras</span>
+<span class="n">gpus</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s1">&#39;GPU&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">gpu</span> <span class="ow">in</span> <span class="n">gpus</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Name:&quot;</span><span class="p">,</span> <span class="n">gpu</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;  Type:&quot;</span><span class="p">,</span> <span class="n">gpu</span><span class="o">.</span><span class="n">device_type</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="using-convnets-with-small-datasets">
+<h1>Using convnets with small datasets<a class="headerlink" href="#using-convnets-with-small-datasets" title="Permalink to this headline">#</a></h1>
+<p>This notebook contains the code sample found in Chapter 5, Section 2 of <a class="reference external" href="https://www.manning.com/books/deep-learning-with-python?a_aid=keras&amp;a_bid=76564dff">Deep Learning with Python</a>. Note that the original text features far more content, in particular further explanations and figures: in this notebook, you will only find source code and related comments.</p>
+<section id="training-a-convnet-from-scratch-on-a-small-dataset">
+<h2>Training a convnet from scratch on a small dataset<a class="headerlink" href="#training-a-convnet-from-scratch-on-a-small-dataset" title="Permalink to this headline">#</a></h2>
+<p>Having to train an image classification model using only very little data is a common situation, which you likely encounter yourself in
+practice if you ever do computer vision in a professional context.</p>
+<p>Having “few” samples can mean anywhere from a few hundreds to a few tens of thousands of images. As a practical example, we will focus on
+classifying images as “dogs” or “cats”, in a dataset containing 4000 pictures of cats and dogs (2000 cats, 2000 dogs). We will use 2000
+pictures for training, 1000 for validation, and finally 1000 for testing.</p>
+<p>In this section, we will review one basic strategy to tackle this problem: training a new model from scratch on what little data we have. We
+will start by naively training a small convnet on our 2000 training samples, without any regularization, to set a baseline for what can be
+achieved. This will get us to a classification accuracy of 71%. At that point, our main issue will be overfitting. Then we will introduce
+<em>data augmentation</em>, a powerful technique for mitigating overfitting in computer vision. By leveraging data augmentation, we will improve
+our network to reach an accuracy of 82%.</p>
+<p>In the next section, we will review two more essential techniques for applying deep learning to small datasets: <em>doing feature extraction
+with a pre-trained network</em> (this will get us to an accuracy of 90% to 93%), and <em>fine-tuning a pre-trained network</em> (this will get us to
+our final accuracy of 95%). Together, these three strategies – training a small model from scratch, doing feature extracting using a
+pre-trained model, and fine-tuning a pre-trained model – will constitute your future toolbox for tackling the problem of doing computer
+vision with small datasets.</p>
+</section>
+<section id="the-relevance-of-deep-learning-for-small-data-problems">
+<h2>The relevance of deep learning for small-data problems<a class="headerlink" href="#the-relevance-of-deep-learning-for-small-data-problems" title="Permalink to this headline">#</a></h2>
+<p>You will sometimes hear that deep learning only works when lots of data is available. This is in part a valid point: one fundamental
+characteristic of deep learning is that it is able to find interesting features in the training data on its own, without any need for manual
+feature engineering, and this can only be achieved when lots of training examples are available. This is especially true for problems where
+the input samples are very high-dimensional, like images.</p>
+<p>However, what constitutes “lots” of samples is relative – relative to the size and depth of the network you are trying to train, for
+starters. It isn’t possible to train a convnet to solve a complex problem with just a few tens of samples, but a few hundreds can
+potentially suffice if the model is small and well-regularized and if the task is simple.
+Because convnets learn local, translation-invariant features, they are very
+data-efficient on perceptual problems. Training a convnet from scratch on a very small image dataset will still yield reasonable results
+despite a relative lack of data, without the need for any custom feature engineering. You will see this in action in this section.</p>
+<p>But what’s more, deep learning models are by nature highly repurposable: you can take, say, an image classification or speech-to-text model
+trained on a large-scale dataset then reuse it on a significantly different problem with only minor changes. Specifically, in the case of
+computer vision, many pre-trained models (usually trained on the ImageNet dataset) are now publicly available for download and can be used
+to bootstrap powerful vision models out of very little data. That’s what we will do in the next section.</p>
+<p>For now, let’s get started by getting our hands on the data.</p>
+</section>
+<section id="downloading-the-data">
+<h2>Downloading the data<a class="headerlink" href="#downloading-the-data" title="Permalink to this headline">#</a></h2>
+<p>The cats vs. dogs dataset that we will use isn’t packaged with Keras. It was made available by <a class="reference external" href="http://Kaggle.com">Kaggle.com</a> as part of a computer vision
+competition in late 2013, back when convnets weren’t quite mainstream. You can download the original dataset at:
+<code class="docutils literal notranslate"><span class="pre">https://www.kaggle.com/c/dogs-vs-cats/data</span></code> (you will need to create a Kaggle account if you don’t already have one – don’t worry, the
+process is painless).</p>
+<p>The pictures are medium-resolution color JPEGs. They look like this:</p>
+<p><img alt="cats_vs_dogs_samples" src="https://s3.amazonaws.com/book.keras.io/img/ch5/cats_vs_dogs_samples.jpg" /></p>
+<p>Unsurprisingly, the cats vs. dogs Kaggle competition in 2013 was won by entrants who used convnets. The best entries could achieve up to
+95% accuracy. In our own example, we will get fairly close to this accuracy (in the next section), even though we will be training our
+models on less than 10% of the data that was available to the competitors.
+This original dataset contains 25,000 images of dogs and cats (12,500 from each class) and is 543MB large (compressed). After downloading
+and uncompressing it, we will create a new dataset containing three subsets: a training set with 1000 samples of each class, a validation
+set with 500 samples of each class, and finally a test set with 500 samples of each class.</p>
+<p>Here are a few lines of code to do this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">shutil</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Unzip file</span>
+<span class="o">!</span>mkdir<span class="w"> </span>-p<span class="w"> </span>dogscats/subset
+<span class="o">!</span>unzip<span class="w"> </span>-o<span class="w"> </span>-q<span class="w"> </span>dogs-vs-cats-subset.zip<span class="w"> </span>-d<span class="w"> </span>dogscats<span class="w"> </span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>^C
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_dir</span> <span class="o">=</span> <span class="s1">&#39;dogscats/subset&#39;</span>
+<span class="n">train_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_dir</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">)</span>
+<span class="n">train_cats_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_dir</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;cats&#39;</span><span class="p">)</span>
+<span class="n">train_dogs_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_dir</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;dogs&#39;</span><span class="p">)</span>
+<span class="n">validation_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_dir</span><span class="p">,</span> <span class="s1">&#39;validation&#39;</span><span class="p">)</span>
+<span class="n">test_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_dir</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>So we have indeed 2000 training images, and then 1000 validation images and 1000 test images. In each split, there is the same number of
+samples from each class: this is a balanced binary classification problem, which means that classification accuracy will be an appropriate
+measure of success.</p>
+</section>
+<section id="building-our-network">
+<h2>Building our network<a class="headerlink" href="#building-our-network" title="Permalink to this headline">#</a></h2>
+<p>We’ve already built a small convnet for MNIST in the previous example, so you should be familiar with them. We will reuse the same
+general structure: our convnet will be a stack of alternated <code class="docutils literal notranslate"><span class="pre">Conv2D</span></code> (with <code class="docutils literal notranslate"><span class="pre">relu</span></code> activation) and <code class="docutils literal notranslate"><span class="pre">MaxPooling2D</span></code> layers.</p>
+<p>However, since we are dealing with bigger images and a more complex problem, we will make our network accordingly larger: it will have one
+more <code class="docutils literal notranslate"><span class="pre">Conv2D</span></code> + <code class="docutils literal notranslate"><span class="pre">MaxPooling2D</span></code> stage. This serves both to augment the capacity of the network, and to further reduce the size of the
+feature maps, so that they aren’t overly large when we reach the <code class="docutils literal notranslate"><span class="pre">Flatten</span></code> layer. Here, since we start from inputs of size 150x150 (a
+somewhat arbitrary choice), we end up with feature maps of size 7x7 right before the <code class="docutils literal notranslate"><span class="pre">Flatten</span></code> layer.</p>
+<p>Note that the depth of the feature maps is progressively increasing in the network (from 32 to 128), while the size of the feature maps is
+decreasing (from 148x148 to 7x7). This is a pattern that you will see in almost all convnets.</p>
+<p>Since we are attacking a binary classification problem, we are ending the network with a single unit (a <code class="docutils literal notranslate"><span class="pre">Dense</span></code> layer of size 1) and a
+<code class="docutils literal notranslate"><span class="pre">sigmoid</span></code> activation. This unit will encode the probability that the network is looking at one class or the other.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span>
+                        <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Flatten</span><span class="p">())</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-03-17 00:12:06.893135: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-03-17 00:12:06.982447: I tensorflow/core/util/port.cc:104] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-03-17 00:12:06.985401: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcudart.so.11.0&#39;; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory
+2023-03-17 00:12:06.985413: I tensorflow/compiler/xla/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+2023-03-17 00:12:08.746125: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer.so.7&#39;; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory
+2023-03-17 00:12:08.746168: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libnvinfer_plugin.so.7&#39;; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory
+2023-03-17 00:12:08.746172: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+2023-03-17 00:12:11.890315: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library &#39;libcuda.so.1&#39;; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory
+2023-03-17 00:12:11.890351: W tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:265] failed call to cuInit: UNKNOWN ERROR (303)
+2023-03-17 00:12:11.890374: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:163] no NVIDIA GPU device is present: /dev/nvidia0 does not exist
+2023-03-17 00:12:11.890659: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s take a look at how the dimensions of the feature maps change with every successive layer:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model: &quot;sequential&quot;
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 148, 148, 32)      896       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 74, 74, 32)       0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 72, 72, 64)        18496     
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 36, 36, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 34, 34, 128)       73856     
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 17, 17, 128)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 15, 15, 128)       147584    
+                                                                 
+ max_pooling2d_3 (MaxPooling  (None, 7, 7, 128)        0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 6272)              0         
+                                                                 
+ dense (Dense)               (None, 512)               3211776   
+                                                                 
+ dense_1 (Dense)             (None, 1)                 513       
+                                                                 
+=================================================================
+Total params: 3,453,121
+Trainable params: 3,453,121
+Non-trainable params: 0
+_________________________________________________________________
+</pre></div>
+</div>
+</div>
+</div>
+<p>For our compilation step, we’ll go with the <code class="docutils literal notranslate"><span class="pre">RMSprop</span></code> optimizer as usual. Since we ended our network with a single sigmoid unit, we will
+use binary crossentropy as our loss (as a reminder, check out the table in Chapter 4, section 5 for a cheatsheet on what loss function to
+use in various situations).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">optimizers</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+              <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">),</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;acc&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/workspaces/artificial_intelligence/.venv/lib/python3.10/site-packages/keras/optimizers/optimizer_v2/rmsprop.py:143: UserWarning: The `lr` argument is deprecated, use `learning_rate` instead.
+  super().__init__(name, **kwargs)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-preprocessing">
+<h2>Data preprocessing<a class="headerlink" href="#data-preprocessing" title="Permalink to this headline">#</a></h2>
+<p>As you already know by now, data should be formatted into appropriately pre-processed floating point tensors before being fed into our
+network. Currently, our data sits on a drive as JPEG files, so the steps for getting it into our network are roughly:</p>
+<ul class="simple">
+<li><p>Read the picture files.</p></li>
+<li><p>Decode the JPEG content to RBG grids of pixels.</p></li>
+<li><p>Convert these into floating point tensors.</p></li>
+<li><p>Rescale the pixel values (between 0 and 255) to the [0, 1] interval (as you know, neural networks prefer to deal with small input values).</p></li>
+</ul>
+<p>It may seem a bit daunting, but thankfully Keras has utilities to take care of these steps automatically. Keras has a module with image
+processing helper tools, located at <code class="docutils literal notranslate"><span class="pre">keras.preprocessing.image</span></code>. In particular, it contains the class <code class="docutils literal notranslate"><span class="pre">ImageDataGenerator</span></code> which allows to
+quickly set up Python generators that can automatically turn image files on disk into batches of pre-processed tensors. This is what we
+will use here.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.preprocessing.image</span> <span class="kn">import</span> <span class="n">ImageDataGenerator</span>
+
+<span class="c1"># All images will be rescaled by 1./255</span>
+<span class="n">train_datagen</span> <span class="o">=</span> <span class="n">ImageDataGenerator</span><span class="p">(</span><span class="n">rescale</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">test_datagen</span> <span class="o">=</span> <span class="n">ImageDataGenerator</span><span class="p">(</span><span class="n">rescale</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
+
+<span class="n">train_generator</span> <span class="o">=</span> <span class="n">train_datagen</span><span class="o">.</span><span class="n">flow_from_directory</span><span class="p">(</span>
+        <span class="c1"># This is the target directory</span>
+        <span class="n">train_dir</span><span class="p">,</span>
+        <span class="c1"># All images will be resized to 150x150</span>
+        <span class="n">target_size</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="c1"># Since we use binary_crossentropy loss, we need binary labels</span>
+        <span class="n">class_mode</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+
+<span class="n">validation_generator</span> <span class="o">=</span> <span class="n">test_datagen</span><span class="o">.</span><span class="n">flow_from_directory</span><span class="p">(</span>
+        <span class="n">validation_dir</span><span class="p">,</span>
+        <span class="n">target_size</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">class_mode</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found 2000 images belonging to 2 classes.
+Found 1000 images belonging to 2 classes.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s take a look at the output of one of these generators: it yields batches of 150x150 RGB images (shape <code class="docutils literal notranslate"><span class="pre">(20,</span> <span class="pre">150,</span> <span class="pre">150,</span> <span class="pre">3)</span></code>) and binary
+labels (shape <code class="docutils literal notranslate"><span class="pre">(20,)</span></code>). 20 is the number of samples in each batch (the batch size). Note that the generator yields these batches
+indefinitely: it just loops endlessly over the images present in the target folder. For this reason, we need to <code class="docutils literal notranslate"><span class="pre">break</span></code> the iteration loop
+at some point.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">data_batch</span><span class="p">,</span> <span class="n">labels_batch</span> <span class="ow">in</span> <span class="n">train_generator</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;data batch shape:&#39;</span><span class="p">,</span> <span class="n">data_batch</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;labels batch shape:&#39;</span><span class="p">,</span> <span class="n">labels_batch</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">break</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data batch shape: (20, 150, 150, 3)
+labels batch shape: (20,)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s fit our model to the data using the generator. We do it using the <code class="docutils literal notranslate"><span class="pre">fit_generator</span></code> method, the equivalent of <code class="docutils literal notranslate"><span class="pre">fit</span></code> for data generators
+like ours. It expects as first argument a Python generator that will yield batches of inputs and targets indefinitely, like ours does.
+Because the data is being generated endlessly, the generator needs to know example how many samples to draw from the generator before
+declaring an epoch over. This is the role of the <code class="docutils literal notranslate"><span class="pre">steps_per_epoch</span></code> argument: after having drawn <code class="docutils literal notranslate"><span class="pre">steps_per_epoch</span></code> batches from the
+generator, i.e. after having run for <code class="docutils literal notranslate"><span class="pre">steps_per_epoch</span></code> gradient descent steps, the fitting process will go to the next epoch. In our case,
+batches are 20-sample large, so it will take 100 batches until we see our target of 2000 samples.</p>
+<p>When using <code class="docutils literal notranslate"><span class="pre">fit_generator</span></code>, one may pass a <code class="docutils literal notranslate"><span class="pre">validation_data</span></code> argument, much like with the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method. Importantly, this argument is
+allowed to be a data generator itself, but it could be a tuple of Numpy arrays as well. If you pass a generator as <code class="docutils literal notranslate"><span class="pre">validation_data</span></code>, then
+this generator is expected to yield batches of validation data endlessly, and thus you should also specify the <code class="docutils literal notranslate"><span class="pre">validation_steps</span></code> argument,
+which tells the process how many batches to draw from the validation generator for evaluation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_generator</span><span class="p">(</span>
+      <span class="n">train_generator</span><span class="p">,</span>
+      <span class="n">steps_per_epoch</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+      <span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+      <span class="n">validation_data</span><span class="o">=</span><span class="n">validation_generator</span><span class="p">,</span>
+      <span class="n">validation_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/30
+  1/100 [..............................] - ETA: 12s - loss: 0.1275 - acc: 0.9500100/100 [==============================] - 9s 85ms/step - loss: 0.0710 - acc: 0.9780 - val_loss: 0.9124 - val_acc: 0.7260
+Epoch 2/30
+100/100 [==============================] - 9s 88ms/step - loss: 0.0634 - acc: 0.9825 - val_loss: 0.9933 - val_acc: 0.7310
+Epoch 3/30
+100/100 [==============================] - 9s 88ms/step - loss: 0.0521 - acc: 0.9865 - val_loss: 1.0423 - val_acc: 0.7210
+Epoch 4/30
+100/100 [==============================] - 9s 88ms/step - loss: 0.0387 - acc: 0.9895 - val_loss: 1.2460 - val_acc: 0.6890
+Epoch 5/30
+100/100 [==============================] - 9s 88ms/step - loss: 0.0385 - acc: 0.9910 - val_loss: 1.1196 - val_acc: 0.7160
+Epoch 6/30
+100/100 [==============================] - 9s 89ms/step - loss: 0.0373 - acc: 0.9890 - val_loss: 1.0895 - val_acc: 0.7290
+Epoch 7/30
+100/100 [==============================] - 9s 90ms/step - loss: 0.0257 - acc: 0.9935 - val_loss: 1.1290 - val_acc: 0.7250
+Epoch 8/30
+100/100 [==============================] - 9s 90ms/step - loss: 0.0213 - acc: 0.9955 - val_loss: 1.1766 - val_acc: 0.7280
+Epoch 9/30
+100/100 [==============================] - 9s 92ms/step - loss: 0.0283 - acc: 0.9920 - val_loss: 1.3709 - val_acc: 0.7200
+Epoch 10/30
+100/100 [==============================] - 9s 90ms/step - loss: 0.0197 - acc: 0.9955 - val_loss: 1.3202 - val_acc: 0.7240
+Epoch 11/30
+100/100 [==============================] - 9s 90ms/step - loss: 0.0204 - acc: 0.9940 - val_loss: 1.3292 - val_acc: 0.7210
+Epoch 12/30
+100/100 [==============================] - 9s 90ms/step - loss: 0.0133 - acc: 0.9965 - val_loss: 1.5113 - val_acc: 0.7180
+Epoch 13/30
+100/100 [==============================] - 9s 92ms/step - loss: 0.0140 - acc: 0.9965 - val_loss: 1.5380 - val_acc: 0.7170
+Epoch 14/30
+100/100 [==============================] - 13s 125ms/step - loss: 0.0088 - acc: 0.9990 - val_loss: 1.4175 - val_acc: 0.7340
+Epoch 15/30
+100/100 [==============================] - 14s 138ms/step - loss: 0.0173 - acc: 0.9945 - val_loss: 1.4227 - val_acc: 0.7300
+Epoch 16/30
+100/100 [==============================] - 14s 137ms/step - loss: 0.0058 - acc: 0.9985 - val_loss: 1.4898 - val_acc: 0.7300
+Epoch 17/30
+100/100 [==============================] - 14s 141ms/step - loss: 0.0217 - acc: 0.9945 - val_loss: 1.6001 - val_acc: 0.7180
+Epoch 18/30
+100/100 [==============================] - 14s 138ms/step - loss: 0.0190 - acc: 0.9945 - val_loss: 1.6033 - val_acc: 0.7320
+Epoch 19/30
+100/100 [==============================] - 14s 145ms/step - loss: 0.0067 - acc: 0.9980 - val_loss: 1.6718 - val_acc: 0.7230
+Epoch 20/30
+100/100 [==============================] - 14s 139ms/step - loss: 0.0029 - acc: 0.9990 - val_loss: 2.1945 - val_acc: 0.7010
+Epoch 21/30
+100/100 [==============================] - 14s 136ms/step - loss: 0.0126 - acc: 0.9950 - val_loss: 3.0790 - val_acc: 0.6680
+Epoch 22/30
+100/100 [==============================] - 14s 137ms/step - loss: 0.0193 - acc: 0.9945 - val_loss: 1.7756 - val_acc: 0.7180
+Epoch 23/30
+100/100 [==============================] - 14s 139ms/step - loss: 0.0069 - acc: 0.9970 - val_loss: 1.8085 - val_acc: 0.7190
+Epoch 24/30
+100/100 [==============================] - 14s 140ms/step - loss: 0.0091 - acc: 0.9975 - val_loss: 1.7834 - val_acc: 0.7320
+Epoch 25/30
+100/100 [==============================] - 10s 95ms/step - loss: 0.0110 - acc: 0.9970 - val_loss: 1.8215 - val_acc: 0.7200
+Epoch 26/30
+100/100 [==============================] - 9s 86ms/step - loss: 0.0093 - acc: 0.9960 - val_loss: 1.8163 - val_acc: 0.7240
+Epoch 27/30
+100/100 [==============================] - 9s 90ms/step - loss: 0.0047 - acc: 0.9995 - val_loss: 1.9675 - val_acc: 0.7320
+Epoch 28/30
+100/100 [==============================] - 9s 90ms/step - loss: 0.0143 - acc: 0.9965 - val_loss: 1.9625 - val_acc: 0.7290
+Epoch 29/30
+100/100 [==============================] - 9s 88ms/step - loss: 0.0041 - acc: 0.9995 - val_loss: 1.9936 - val_acc: 0.7340
+Epoch 30/30
+100/100 [==============================] - 9s 90ms/step - loss: 0.0097 - acc: 0.9970 - val_loss: 2.0005 - val_acc: 0.7330
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_85496/3259228942.py:1: UserWarning: `Model.fit_generator` is deprecated and will be removed in a future version. Please use `Model.fit`, which supports generators.
+  history = model.fit_generator(
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is good practice to always save your models after training:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;cats_and_dogs_small_1.h5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s plot the loss and accuracy of the model over the training and validation data during training:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">acc</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;acc&#39;</span><span class="p">]</span>
+<span class="n">val_acc</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_acc&#39;</span><span class="p">]</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]</span>
+<span class="n">val_loss</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_loss&#39;</span><span class="p">]</span>
+
+<span class="n">epochs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">acc</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training acc&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">val_acc</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation acc&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training and validation accuracy&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training and validation loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/1cc2fd7f3c8a7a7e26782f7b3a2116e075db7d86f573c131d8ca81c352e4b441.png" src="../../../../_images/1cc2fd7f3c8a7a7e26782f7b3a2116e075db7d86f573c131d8ca81c352e4b441.png" />
+<img alt="../../../../_images/135eb166a28853ad39f72bb348d525f05626ea2afa843e3c197e2a2a504b0e8b.png" src="../../../../_images/135eb166a28853ad39f72bb348d525f05626ea2afa843e3c197e2a2a504b0e8b.png" />
+</div>
+</div>
+<p>These plots are characteristic of overfitting. Our training accuracy increases linearly over time, until it reaches nearly 100%, while our
+validation accuracy stalls at 70-72%. Our validation loss reaches its minimum after only five epochs then stalls, while the training loss
+keeps decreasing linearly until it reaches nearly 0.</p>
+<p>Because we only have relatively few training samples (2000), overfitting is going to be our number one concern. You already know about a
+number of techniques that can help mitigate overfitting, such as dropout and weight decay (L2 regularization). We are now going to
+introduce a new one, specific to computer vision, and used almost universally when processing images with deep learning models: <em>data
+augmentation</em>.</p>
+</section>
+<section id="using-data-augmentation">
+<h2>Using data augmentation<a class="headerlink" href="#using-data-augmentation" title="Permalink to this headline">#</a></h2>
+<p>Overfitting is caused by having too few samples to learn from, rendering us unable to train a model able to generalize to new data.
+Given infinite data, our model would be exposed to every possible aspect of the data distribution at hand: we would never overfit. Data
+augmentation takes the approach of generating more training data from existing training samples, by “augmenting” the samples via a number
+of random transformations that yield believable-looking images. The goal is that at training time, our model would never see the exact same
+picture twice. This helps the model get exposed to more aspects of the data and generalize better.</p>
+<p>In Keras, this can be done by configuring a number of random transformations to be performed on the images read by our <code class="docutils literal notranslate"><span class="pre">ImageDataGenerator</span></code>
+instance. Let’s get started with an example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">datagen</span> <span class="o">=</span> <span class="n">ImageDataGenerator</span><span class="p">(</span>
+      <span class="n">rotation_range</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+      <span class="n">width_shift_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+      <span class="n">height_shift_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+      <span class="n">shear_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+      <span class="n">zoom_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+      <span class="n">horizontal_flip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">fill_mode</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>These are just a few of the options available (for more, see the Keras documentation). Let’s quickly go over what we just wrote:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rotation_range</span></code> is a value in degrees (0-180), a range within which to randomly rotate pictures.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">width_shift</span></code> and <code class="docutils literal notranslate"><span class="pre">height_shift</span></code> are ranges (as a fraction of total width or height) within which to randomly translate pictures
+vertically or horizontally.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shear_range</span></code> is for randomly applying shearing transformations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zoom_range</span></code> is for randomly zooming inside pictures.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">horizontal_flip</span></code> is for randomly flipping half of the images horizontally – relevant when there are no assumptions of horizontal
+asymmetry (e.g. real-world pictures).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fill_mode</span></code> is the strategy used for filling in newly created pixels, which can appear after a rotation or a width/height shift.</p></li>
+</ul>
+<p>Let’s take a look at our augmented images:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This is module with image preprocessing utilities</span>
+<span class="kn">import</span> <span class="nn">keras.utils</span> <span class="k">as</span> <span class="nn">image</span>
+
+<span class="n">fnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">train_cats_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">train_cats_dir</span><span class="p">)]</span>
+
+<span class="c1"># We pick one image to &quot;augment&quot;</span>
+<span class="n">img_path</span> <span class="o">=</span> <span class="n">fnames</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># Read the image and resize it</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">load_img</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">target_size</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
+
+<span class="c1"># Convert it to a Numpy array with shape (150, 150, 3)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">img_to_array</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="c1"># Reshape it to (1, 150, 150, 3)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># The .flow() command below generates batches of randomly transformed images.</span>
+<span class="c1"># It will loop indefinitely, so we need to `break` the loop at some point!</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">datagen</span><span class="o">.</span><span class="n">flow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">imgplot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">array_to_img</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">break</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/940a8487571f67d8176edb0f566acea4a7294ef0e76593ad7c31190c098e3527.png" src="../../../../_images/940a8487571f67d8176edb0f566acea4a7294ef0e76593ad7c31190c098e3527.png" />
+<img alt="../../../../_images/f67d366adcb3b2ad615e3cbfcc6ab8e212f80dc9df33440521b862c0a8cf2c74.png" src="../../../../_images/f67d366adcb3b2ad615e3cbfcc6ab8e212f80dc9df33440521b862c0a8cf2c74.png" />
+<img alt="../../../../_images/4f97efb675d79503f97a89b0fdac92d803e62ed751a75bf1f3cd2afc8d7ce100.png" src="../../../../_images/4f97efb675d79503f97a89b0fdac92d803e62ed751a75bf1f3cd2afc8d7ce100.png" />
+<img alt="../../../../_images/3ba8cc4c7f841211110c26dacef63b463d51ed5200d5dc6d5f59fcfa8edd8c6f.png" src="../../../../_images/3ba8cc4c7f841211110c26dacef63b463d51ed5200d5dc6d5f59fcfa8edd8c6f.png" />
+</div>
+</div>
+<p>If we train a new network using this data augmentation configuration, our network will never see twice the same input. However, the inputs
+that it sees are still heavily intercorrelated, since they come from a small number of original images – we cannot produce new information,
+we can only remix existing information. As such, this might not be quite enough to completely get rid of overfitting. To further fight
+overfitting, we will also add a Dropout layer to our model, right before the densely-connected classifier:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span>
+                        <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Flatten</span><span class="p">())</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+              <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">),</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;acc&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/workspaces/artificial_intelligence/.venv/lib/python3.10/site-packages/keras/optimizers/optimizer_v2/rmsprop.py:143: UserWarning: The `lr` argument is deprecated, use `learning_rate` instead.
+  super().__init__(name, **kwargs)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s train our network using data augmentation and dropout:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_datagen</span> <span class="o">=</span> <span class="n">ImageDataGenerator</span><span class="p">(</span>
+    <span class="n">rescale</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span>
+    <span class="n">rotation_range</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+    <span class="n">width_shift_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">height_shift_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">shear_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">zoom_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">horizontal_flip</span><span class="o">=</span><span class="kc">True</span><span class="p">,)</span>
+
+<span class="c1"># Note that the validation data should not be augmented!</span>
+<span class="n">validation_datagen</span> <span class="o">=</span> <span class="n">ImageDataGenerator</span><span class="p">(</span><span class="n">rescale</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
+
+<span class="n">train_generator</span> <span class="o">=</span> <span class="n">train_datagen</span><span class="o">.</span><span class="n">flow_from_directory</span><span class="p">(</span>
+        <span class="c1"># This is the target directory</span>
+        <span class="n">train_dir</span><span class="p">,</span>
+        <span class="c1"># All images will be resized to 150x150</span>
+        <span class="n">target_size</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+        <span class="c1"># Since we use binary_crossentropy loss, we need binary labels</span>
+        <span class="n">class_mode</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+
+<span class="n">validation_generator</span> <span class="o">=</span> <span class="n">validation_datagen</span><span class="o">.</span><span class="n">flow_from_directory</span><span class="p">(</span>
+        <span class="n">validation_dir</span><span class="p">,</span>
+        <span class="n">target_size</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+        <span class="n">class_mode</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+
+<span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+      <span class="n">train_generator</span><span class="p">,</span>
+      <span class="n">steps_per_epoch</span><span class="o">=</span><span class="mi">2000</span><span class="o">//</span><span class="n">train_generator</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+      <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+      <span class="n">validation_data</span><span class="o">=</span><span class="n">validation_generator</span><span class="p">,</span>
+      <span class="n">validation_steps</span><span class="o">=</span><span class="mi">1000</span><span class="o">//</span><span class="n">validation_generator</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found 2000 images belonging to 2 classes.
+Found 1000 images belonging to 2 classes.
+Epoch 1/100
+62/62 [==============================] - 14s 221ms/step - loss: 0.6655 - acc: 0.6016 - val_loss: 0.6452 - val_acc: 0.6159
+Epoch 2/100
+62/62 [==============================] - 10s 159ms/step - loss: 0.6497 - acc: 0.6260 - val_loss: 0.6243 - val_acc: 0.6381
+Epoch 3/100
+62/62 [==============================] - 10s 161ms/step - loss: 0.6440 - acc: 0.6250 - val_loss: 0.6135 - val_acc: 0.6442
+Epoch 4/100
+62/62 [==============================] - 10s 161ms/step - loss: 0.6317 - acc: 0.6448 - val_loss: 0.6083 - val_acc: 0.6623
+Epoch 5/100
+62/62 [==============================] - 10s 161ms/step - loss: 0.6196 - acc: 0.6621 - val_loss: 0.5904 - val_acc: 0.6845
+Epoch 6/100
+62/62 [==============================] - 10s 165ms/step - loss: 0.6102 - acc: 0.6524 - val_loss: 0.5894 - val_acc: 0.6835
+Epoch 7/100
+62/62 [==============================] - 10s 165ms/step - loss: 0.6034 - acc: 0.6738 - val_loss: 0.5931 - val_acc: 0.6774
+Epoch 8/100
+62/62 [==============================] - 10s 165ms/step - loss: 0.6066 - acc: 0.6646 - val_loss: 0.6089 - val_acc: 0.6462
+Epoch 9/100
+62/62 [==============================] - 10s 165ms/step - loss: 0.5913 - acc: 0.6839 - val_loss: 0.5930 - val_acc: 0.6835
+Epoch 10/100
+62/62 [==============================] - 10s 163ms/step - loss: 0.5929 - acc: 0.6834 - val_loss: 0.5481 - val_acc: 0.7188
+Epoch 11/100
+62/62 [==============================] - 10s 166ms/step - loss: 0.5798 - acc: 0.6880 - val_loss: 0.5547 - val_acc: 0.7097
+Epoch 12/100
+62/62 [==============================] - 10s 166ms/step - loss: 0.5803 - acc: 0.6895 - val_loss: 0.5428 - val_acc: 0.7349
+Epoch 13/100
+62/62 [==============================] - 10s 167ms/step - loss: 0.5767 - acc: 0.6982 - val_loss: 0.5937 - val_acc: 0.6633
+Epoch 14/100
+62/62 [==============================] - 10s 168ms/step - loss: 0.5690 - acc: 0.7093 - val_loss: 0.5582 - val_acc: 0.7087
+Epoch 15/100
+62/62 [==============================] - 11s 169ms/step - loss: 0.5612 - acc: 0.7185 - val_loss: 0.5407 - val_acc: 0.7258
+Epoch 16/100
+62/62 [==============================] - 13s 217ms/step - loss: 0.5625 - acc: 0.7073 - val_loss: 0.5600 - val_acc: 0.7016
+Epoch 17/100
+62/62 [==============================] - 17s 266ms/step - loss: 0.5591 - acc: 0.7124 - val_loss: 0.5263 - val_acc: 0.7429
+Epoch 18/100
+62/62 [==============================] - 15s 244ms/step - loss: 0.5525 - acc: 0.7241 - val_loss: 0.5860 - val_acc: 0.7026
+Epoch 19/100
+62/62 [==============================] - 15s 244ms/step - loss: 0.5475 - acc: 0.7185 - val_loss: 0.5438 - val_acc: 0.7228
+Epoch 20/100
+62/62 [==============================] - 16s 259ms/step - loss: 0.5352 - acc: 0.7302 - val_loss: 0.5343 - val_acc: 0.7278
+Epoch 21/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.5373 - acc: 0.7185 - val_loss: 0.5298 - val_acc: 0.7359
+Epoch 22/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.5339 - acc: 0.7256 - val_loss: 0.5634 - val_acc: 0.7208
+Epoch 23/100
+62/62 [==============================] - 16s 252ms/step - loss: 0.5484 - acc: 0.7185 - val_loss: 0.5175 - val_acc: 0.7329
+Epoch 24/100
+62/62 [==============================] - 15s 248ms/step - loss: 0.5377 - acc: 0.7302 - val_loss: 0.5817 - val_acc: 0.6915
+Epoch 25/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.5481 - acc: 0.7246 - val_loss: 0.5347 - val_acc: 0.7208
+Epoch 26/100
+62/62 [==============================] - 15s 243ms/step - loss: 0.5361 - acc: 0.7317 - val_loss: 0.5382 - val_acc: 0.7026
+Epoch 27/100
+62/62 [==============================] - 15s 245ms/step - loss: 0.5133 - acc: 0.7485 - val_loss: 0.4947 - val_acc: 0.7692
+Epoch 28/100
+62/62 [==============================] - 11s 171ms/step - loss: 0.5304 - acc: 0.7424 - val_loss: 0.4955 - val_acc: 0.7540
+Epoch 29/100
+62/62 [==============================] - 10s 158ms/step - loss: 0.5160 - acc: 0.7505 - val_loss: 0.4987 - val_acc: 0.7560
+Epoch 30/100
+62/62 [==============================] - 10s 163ms/step - loss: 0.5209 - acc: 0.7317 - val_loss: 0.5116 - val_acc: 0.7470
+Epoch 31/100
+62/62 [==============================] - 10s 164ms/step - loss: 0.5123 - acc: 0.7520 - val_loss: 0.4941 - val_acc: 0.7581
+Epoch 32/100
+62/62 [==============================] - 10s 165ms/step - loss: 0.5145 - acc: 0.7342 - val_loss: 0.5412 - val_acc: 0.7208
+Epoch 33/100
+62/62 [==============================] - 10s 164ms/step - loss: 0.5071 - acc: 0.7444 - val_loss: 0.5031 - val_acc: 0.7621
+Epoch 34/100
+62/62 [==============================] - 10s 164ms/step - loss: 0.5095 - acc: 0.7414 - val_loss: 0.5034 - val_acc: 0.7611
+Epoch 35/100
+62/62 [==============================] - 14s 230ms/step - loss: 0.5124 - acc: 0.7403 - val_loss: 0.4707 - val_acc: 0.7752
+Epoch 36/100
+62/62 [==============================] - 16s 251ms/step - loss: 0.5022 - acc: 0.7500 - val_loss: 0.4844 - val_acc: 0.7581
+Epoch 37/100
+62/62 [==============================] - 15s 245ms/step - loss: 0.5088 - acc: 0.7414 - val_loss: 0.5168 - val_acc: 0.7359
+Epoch 38/100
+62/62 [==============================] - 15s 246ms/step - loss: 0.4923 - acc: 0.7571 - val_loss: 0.4733 - val_acc: 0.7792
+Epoch 39/100
+62/62 [==============================] - 16s 259ms/step - loss: 0.5008 - acc: 0.7602 - val_loss: 0.5266 - val_acc: 0.7188
+Epoch 40/100
+62/62 [==============================] - 15s 248ms/step - loss: 0.4877 - acc: 0.7586 - val_loss: 0.4840 - val_acc: 0.7631
+Epoch 41/100
+62/62 [==============================] - 15s 245ms/step - loss: 0.4823 - acc: 0.7612 - val_loss: 0.5330 - val_acc: 0.7278
+Epoch 42/100
+62/62 [==============================] - 15s 243ms/step - loss: 0.4903 - acc: 0.7591 - val_loss: 0.5017 - val_acc: 0.7399
+Epoch 43/100
+62/62 [==============================] - 15s 244ms/step - loss: 0.4879 - acc: 0.7627 - val_loss: 0.5033 - val_acc: 0.7601
+Epoch 44/100
+62/62 [==============================] - 15s 243ms/step - loss: 0.4775 - acc: 0.7729 - val_loss: 0.5747 - val_acc: 0.6946
+Epoch 45/100
+62/62 [==============================] - 15s 245ms/step - loss: 0.4842 - acc: 0.7678 - val_loss: 0.5234 - val_acc: 0.7389
+Epoch 46/100
+62/62 [==============================] - 16s 253ms/step - loss: 0.4716 - acc: 0.7815 - val_loss: 0.4736 - val_acc: 0.7601
+Epoch 47/100
+62/62 [==============================] - 16s 256ms/step - loss: 0.4655 - acc: 0.7774 - val_loss: 0.4808 - val_acc: 0.7601
+Epoch 48/100
+62/62 [==============================] - 15s 245ms/step - loss: 0.4703 - acc: 0.7713 - val_loss: 0.5204 - val_acc: 0.7298
+Epoch 49/100
+62/62 [==============================] - 15s 248ms/step - loss: 0.4745 - acc: 0.7744 - val_loss: 0.5082 - val_acc: 0.7329
+Epoch 50/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.4589 - acc: 0.7739 - val_loss: 0.5027 - val_acc: 0.7571
+Epoch 51/100
+62/62 [==============================] - 13s 203ms/step - loss: 0.4648 - acc: 0.7668 - val_loss: 0.4599 - val_acc: 0.7772
+Epoch 52/100
+62/62 [==============================] - 10s 159ms/step - loss: 0.4588 - acc: 0.7790 - val_loss: 0.5159 - val_acc: 0.7500
+Epoch 53/100
+62/62 [==============================] - 10s 160ms/step - loss: 0.4684 - acc: 0.7815 - val_loss: 0.4669 - val_acc: 0.7823
+Epoch 54/100
+62/62 [==============================] - 10s 166ms/step - loss: 0.4654 - acc: 0.7846 - val_loss: 0.4933 - val_acc: 0.7651
+Epoch 55/100
+62/62 [==============================] - 10s 162ms/step - loss: 0.4600 - acc: 0.7851 - val_loss: 0.5335 - val_acc: 0.7611
+Epoch 56/100
+62/62 [==============================] - 10s 162ms/step - loss: 0.4650 - acc: 0.7769 - val_loss: 0.4733 - val_acc: 0.7671
+Epoch 57/100
+62/62 [==============================] - 10s 164ms/step - loss: 0.4653 - acc: 0.7779 - val_loss: 0.4764 - val_acc: 0.7661
+Epoch 58/100
+62/62 [==============================] - 12s 191ms/step - loss: 0.4653 - acc: 0.7779 - val_loss: 0.4989 - val_acc: 0.7611
+Epoch 59/100
+62/62 [==============================] - 16s 249ms/step - loss: 0.4495 - acc: 0.7886 - val_loss: 0.4463 - val_acc: 0.7913
+Epoch 60/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.4427 - acc: 0.7856 - val_loss: 0.4853 - val_acc: 0.7540
+Epoch 61/100
+62/62 [==============================] - 15s 246ms/step - loss: 0.4584 - acc: 0.7713 - val_loss: 0.4627 - val_acc: 0.7782
+Epoch 62/100
+62/62 [==============================] - 16s 252ms/step - loss: 0.4472 - acc: 0.7932 - val_loss: 0.4419 - val_acc: 0.7923
+Epoch 63/100
+62/62 [==============================] - 16s 248ms/step - loss: 0.4441 - acc: 0.7749 - val_loss: 0.4931 - val_acc: 0.7631
+Epoch 64/100
+62/62 [==============================] - 15s 246ms/step - loss: 0.4476 - acc: 0.7907 - val_loss: 0.4731 - val_acc: 0.7651
+Epoch 65/100
+62/62 [==============================] - 15s 246ms/step - loss: 0.4464 - acc: 0.7932 - val_loss: 0.4601 - val_acc: 0.7772
+Epoch 66/100
+62/62 [==============================] - 15s 246ms/step - loss: 0.4353 - acc: 0.7983 - val_loss: 0.4615 - val_acc: 0.7671
+Epoch 67/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.4449 - acc: 0.7846 - val_loss: 0.4985 - val_acc: 0.7591
+Epoch 68/100
+62/62 [==============================] - 16s 251ms/step - loss: 0.4344 - acc: 0.7886 - val_loss: 0.4917 - val_acc: 0.7601
+Epoch 69/100
+62/62 [==============================] - 16s 249ms/step - loss: 0.4521 - acc: 0.7922 - val_loss: 0.4478 - val_acc: 0.7893
+Epoch 70/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.4320 - acc: 0.7952 - val_loss: 0.5413 - val_acc: 0.7550
+Epoch 71/100
+62/62 [==============================] - 15s 245ms/step - loss: 0.4251 - acc: 0.8054 - val_loss: 0.5117 - val_acc: 0.7631
+Epoch 72/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.4368 - acc: 0.7927 - val_loss: 0.4730 - val_acc: 0.7611
+Epoch 73/100
+62/62 [==============================] - 16s 250ms/step - loss: 0.4145 - acc: 0.8064 - val_loss: 0.4523 - val_acc: 0.7853
+Epoch 74/100
+62/62 [==============================] - 15s 248ms/step - loss: 0.4363 - acc: 0.7952 - val_loss: 0.4781 - val_acc: 0.7702
+Epoch 75/100
+62/62 [==============================] - 15s 249ms/step - loss: 0.4238 - acc: 0.7973 - val_loss: 0.4388 - val_acc: 0.7974
+Epoch 76/100
+62/62 [==============================] - 16s 248ms/step - loss: 0.4072 - acc: 0.8100 - val_loss: 0.4566 - val_acc: 0.7843
+Epoch 77/100
+62/62 [==============================] - 15s 249ms/step - loss: 0.4222 - acc: 0.8074 - val_loss: 0.4610 - val_acc: 0.7913
+Epoch 78/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.4240 - acc: 0.8034 - val_loss: 0.4732 - val_acc: 0.7681
+Epoch 79/100
+62/62 [==============================] - 11s 172ms/step - loss: 0.4285 - acc: 0.8028 - val_loss: 0.4199 - val_acc: 0.8165
+Epoch 80/100
+62/62 [==============================] - 10s 159ms/step - loss: 0.4186 - acc: 0.8100 - val_loss: 0.4217 - val_acc: 0.8125
+Epoch 81/100
+62/62 [==============================] - 10s 164ms/step - loss: 0.4183 - acc: 0.8059 - val_loss: 0.4335 - val_acc: 0.8115
+Epoch 82/100
+62/62 [==============================] - 10s 164ms/step - loss: 0.4226 - acc: 0.8054 - val_loss: 0.4336 - val_acc: 0.8115
+Epoch 83/100
+62/62 [==============================] - 10s 164ms/step - loss: 0.4259 - acc: 0.8074 - val_loss: 0.4942 - val_acc: 0.7812
+Epoch 84/100
+62/62 [==============================] - 10s 166ms/step - loss: 0.4180 - acc: 0.8105 - val_loss: 0.4589 - val_acc: 0.7812
+Epoch 85/100
+62/62 [==============================] - 10s 165ms/step - loss: 0.4086 - acc: 0.8176 - val_loss: 0.4930 - val_acc: 0.7782
+Epoch 86/100
+62/62 [==============================] - 14s 226ms/step - loss: 0.4156 - acc: 0.8074 - val_loss: 0.4664 - val_acc: 0.7802
+Epoch 87/100
+62/62 [==============================] - 16s 251ms/step - loss: 0.4206 - acc: 0.8105 - val_loss: 0.4820 - val_acc: 0.7722
+Epoch 88/100
+62/62 [==============================] - 16s 252ms/step - loss: 0.4071 - acc: 0.8054 - val_loss: 0.4834 - val_acc: 0.7621
+Epoch 89/100
+62/62 [==============================] - 16s 248ms/step - loss: 0.4152 - acc: 0.8110 - val_loss: 0.4362 - val_acc: 0.8024
+Epoch 90/100
+62/62 [==============================] - 15s 246ms/step - loss: 0.4112 - acc: 0.8079 - val_loss: 0.4612 - val_acc: 0.7974
+Epoch 91/100
+62/62 [==============================] - 16s 255ms/step - loss: 0.4049 - acc: 0.8181 - val_loss: 0.4322 - val_acc: 0.8095
+Epoch 92/100
+62/62 [==============================] - 15s 245ms/step - loss: 0.4137 - acc: 0.8161 - val_loss: 0.4610 - val_acc: 0.7853
+Epoch 93/100
+62/62 [==============================] - 15s 249ms/step - loss: 0.3962 - acc: 0.8186 - val_loss: 0.4419 - val_acc: 0.8004
+Epoch 94/100
+62/62 [==============================] - 15s 244ms/step - loss: 0.4065 - acc: 0.8074 - val_loss: 0.4512 - val_acc: 0.7772
+Epoch 95/100
+62/62 [==============================] - 16s 252ms/step - loss: 0.4035 - acc: 0.8079 - val_loss: 0.4926 - val_acc: 0.7792
+Epoch 96/100
+62/62 [==============================] - 16s 248ms/step - loss: 0.3990 - acc: 0.8232 - val_loss: 0.4223 - val_acc: 0.8085
+Epoch 97/100
+62/62 [==============================] - 15s 245ms/step - loss: 0.4054 - acc: 0.8166 - val_loss: 0.4659 - val_acc: 0.7802
+Epoch 98/100
+62/62 [==============================] - 15s 248ms/step - loss: 0.3923 - acc: 0.8216 - val_loss: 0.5009 - val_acc: 0.7742
+Epoch 99/100
+62/62 [==============================] - 15s 247ms/step - loss: 0.4072 - acc: 0.8150 - val_loss: 0.5291 - val_acc: 0.7500
+Epoch 100/100
+62/62 [==============================] - 15s 249ms/step - loss: 0.4035 - acc: 0.8155 - val_loss: 0.4661 - val_acc: 0.7843
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s save our model – we will be using it in the section on convnet visualization.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;cats_and_dogs_small_2.h5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s plot our results again:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">acc</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;acc&#39;</span><span class="p">]</span>
+<span class="n">val_acc</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_acc&#39;</span><span class="p">]</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]</span>
+<span class="n">val_loss</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_loss&#39;</span><span class="p">]</span>
+
+<span class="n">epochs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">acc</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training acc&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">val_acc</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation acc&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training and validation accuracy&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training and validation loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/87e87039544af66b0998b767f3abefd5857d9222fd7a39d150cf4a2088e2653e.png" src="../../../../_images/87e87039544af66b0998b767f3abefd5857d9222fd7a39d150cf4a2088e2653e.png" />
+<img alt="../../../../_images/84dff047463cbc70a3e900070e87dbae90c9b01a7fb418634bf3cab95aa25d66.png" src="../../../../_images/84dff047463cbc70a3e900070e87dbae90c9b01a7fb418634bf3cab95aa25d66.png" />
+</div>
+</div>
+<p>Thanks to data augmentation and dropout, we are no longer overfitting: the training curves are rather closely tracking the validation
+curves. We are now able to reach an accuracy of 82%, a 15% relative improvement over the non-regularized model.</p>
+<p>By leveraging regularization techniques even further and by tuning the network’s parameters (such as the number of filters per convolution
+layer, or the number of layers in the network), we may be able to get an even better accuracy, likely up to 86-87%. However, it would prove
+very difficult to go any higher just by training our own convnet from scratch, simply because we have so little data to work with. As a
+next step to improve our accuracy on this problem, we will have to leverage a pre-trained model, which will be the focus of the next two
+sections.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "pantelis/data-mining",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./aiml-common/lectures/cnn/cnn-example-architectures"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="_index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CNN Example Architectures</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../scene-understanding/feature-extraction-resnet/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Feature Extraction via Residual Networks</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-a-convnet-from-scratch-on-a-small-dataset">Training a convnet from scratch on a small dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-relevance-of-deep-learning-for-small-data-problems">The relevance of deep learning for small-data problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-the-data">Downloading the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-our-network">Building our network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preprocessing">Data preprocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-data-augmentation">Using data augmentation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pantelis Monogioudis, Ph.D
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
