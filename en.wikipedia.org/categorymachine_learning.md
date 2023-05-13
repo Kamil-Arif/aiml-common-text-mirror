@@ -1,2 +1,0 @@
-Machine learning is a branch of statistics and computer science which
-studies algorithms and architectures that learn from observed facts.
