@@ -1,0 +1,6 @@
+This category combines all articles with unsourced statements from May
+2022 (2022-05) to enable us to work through the backlog more
+systematically. It is a member of Category:Articles with unsourced
+statements. To add an article to this category add {{Citation
+needed\|date=May 2022}} to the article. If you omit the date a bot will
+add it for you at some point.

@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- SEO -->
+    <title>Delivering AI Applications with Open Source Platforms at Scale</title>
+    <meta name="description" content="Delivering AI Applications">
+
+    <!-- URL CANONICAL -->
+    <!-- <link rel="canonical" href="http://your-url.com/permalink"> -->
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,700,700i%7CMaitree:200,300,400,600,700&amp;subset=latin-ext" rel="stylesheet">
+
+    <!-- CSS Base -->
+    <link rel="stylesheet" type='text/css' media='all' href="../static/css/webslides.css">
+
+    <!-- Optional - CSS SVG Icons (Font Awesome) -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" type="text/css" media="all" href="../static/css/svg-icons.css"> -->
+
+    <!-- SOCIAL CARDS (ADD YOUR INFO) -->
+
+    <!-- FACEBOOK -->
+    <!-- <meta property="og:url" content="http://your-url.com/permalink"> 
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Make a Keynote presentation using HTML"> 
+    <meta property="og:description" content="WebSlides is the easiest way to make HTML presentations. 120+ free slides ready to use."> 
+    <meta property="og:updated_time" content="2017-01-04T17:32:14"> 
+    <meta property="og:image" content="../static/images/share-webslides.jpg" > --> 
+
+    <!-- TWITTER -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@monogioudis"> 
+    <meta name="twitter:creator" content="@monogioudis"> 
+    <meta name="twitter:title" content="Delivering AI Applications"> 
+    <meta name="twitter:description" content=""> 
+    <meta name="twitter:image" content="../static/images/share-webslides.jpg"> 
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" sizes="16x16" href="../static/images/favicons/favicon.png">
+    <link rel="shortcut icon" sizes="32x32" href="../static/images/favicons/favicon-32.png">
+    <link rel="apple-touch-icon icon" sizes="76x76" href="../static/images/favicons/favicon-76.png">
+    <link rel="apple-touch-icon icon" sizes="120x120" href="../static/images/favicons/favicon-120.png">
+    <link rel="apple-touch-icon icon" sizes="152x152" href="../static/images/favicons/favicon-152.png">
+    <link rel="apple-touch-icon icon" sizes="180x180" href="../static/images/favicons/favicon-180.png">
+    <link rel="apple-touch-icon icon" sizes="192x192" href="../static/images/favicons/favicon-192.png">
+
+    <!-- Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#333333">
+  </head>
+  <body>
+    <header role="banner">
+      <nav role="navigation">
+          <a href="https://www.bell-labs.com"> <i class="fas fa-external-link-square-alt fa-2x"></i></a>
+        <ul>
+          <li class="github">
+              <a rel="external" href="https://github.com/pantelis" title="Github"><i class="fab fa-github fa-2x"></i></a>
+          </li>
+          <li class="twitter">
+              <a rel="external" href="https://twitter.com/monogioudis" title="Twitter"><i class="fab fa-twitter fa-2x"></i></a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main role="main">
+      <article id="webslides">
+        <section class="bg-apple">
+          <!--.wrap = container (width: 90%) -->
+          <div class="wrap size-50">
+            <h1>Delivering AI Applications with Open Source Platforms at Scale</h1>
+          &nbsp;  
+          &nbsp;
+          &nbsp;  
+          &nbsp;
+          &nbsp;  
+          &nbsp;
+          <ul>Pantelis Monogioudis, Gurudutt Hosanghadi, Lorant Farkas, Chris White</ul>
+          &nbsp;  
+          &nbsp;
+          &nbsp;  
+          &nbsp;
+          &nbsp;  
+          &nbsp;
+          <ul>Augmented Intelligence & Devices Research Lab</ul>
+          <ul>Bell-Labs, Murray Hill, NJ, USA</ul>
+        </div>
+        </section>
+        
+          <section class="bg-apple alignleft">
+              <div class="wrap">
+                <img class="alignleft size-20" src="../static/images/me.jpg" alt="iPhone">
+                <h2>About me</h2>
+                
+                <p>20 years of experience in leading Research & Development projects. I started in wireless communications (PHY/MAC) in the 90s and in 2000’s started 
+                  diversifying into Machine Learning initially for wireless networks and later for all sorts of applications.  Currently leading ~15 researchers in 
+                  Murray Hill NJ and Budapest in Applied Machine Learning working on real-time multisensory machine learning applications. 
+                  1 (failed) startup, 15 journal publications and 50 patents issued/pending. As of spring 2019 I am also with the 
+                  Computer Science department of NJIT.  I live in Randolph, NJ with my wife, my two boys Alex & Nicholas and my dog Bleu. 
+                </p>
+                <h1>We are hiring ML researchers / engineers in Paris-Saclay region - please get in touch with me via linkedin / twitter if you are interested.</h1>
+              </div>
+              <!-- .end .wrap -->
+            </section>
+
+        <section class="bg-apple alignleft">
+          <!--.wrap = container (width: 90%) -->
+          <div class="wrap">
+            <h2>A nautical analogy on where we are today with AI</h2>
+            <figure><img class="aligncenter" src="../static/images/nautical-analogy.png" alt="Cumberland Basin, April 1844"></figure>
+          </div>
+          <!-- .end .wrap -->
+        </section>
+        
+        <section class="bg-apple" >
+          <div class="wrap">
+            <h2>DARPA's AI development in waves</h2>
+            <hr>
+            <div class="grid">
+              <div class="column">
+                <h3>Symbolic GOFAI</h3>
+                <div class="embed">
+                  <iframe src="https://www.youtube.com/embed/qnKSfY_RDOU">
+                  </iframe>
+                 </div>
+                <p>> 1980</p>
+              </div>
+              <div class="column">
+                <h3>Connectionism</h3>
+                <div class="embed">
+                  <iframe src="https://www.youtube.com/embed/1dBLLB2qasM">
+                  </iframe>
+                 </div>
+                 <p> > 2010</p>
+              </div>
+              <div class="column">
+                <h3>AGI (kind of)</h3>
+                <div class="embed">
+                  <iframe src="https://www.youtube.com/embed/LikxFZZO2sk">
+                  </iframe>
+                 </div>
+                 <p>2020s</p>
+                <p>Meaning and resoning in NLP, Inference and Representation of Causality, 
+                  Uncertainty Representations, Long-term Goal Planning, World Models </p>
+              </div>
+            </div>
+          </div>
+        </section>
+  
+        <section class="bg-apple aligncenter">
+            <div class="wrap zoomIn">
+              <h1>
+                AI in Health
+              </h1>
+            </div>
+        </section>
+
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/unreal-architecture.jpg')"></span>
+            <div class="wrap">
+              <div class="content-top">
+                <h2> Capturing the AI opportunity - heartflow.com case study</h2>
+                <h4>The team and the idea behind it</h4>
+                <h4>The Business Model </h4>
+                <h4>The Architecture </h4>
+                <h4>The Implementation (Pipelines) </h4>
+                <h4>The Market Validation & Exit </h4>
+              </div>
+            </div>
+        </section>
+
+        <section class="bg-apple slide-bottom">
+            <!-- Overlay/Opacity: [class*="bg-"] > .background.dark or .light -->
+            <span class="background" style="background-image:url('https://source.unsplash.com/Y5Tjb62cxl8/')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <p>
+                  <svg class="large fa-tree">
+                    <use xlink:href="#fa-tree"></use>
+                  </svg>
+                </p>
+                <h1>640,000 people die every year</h1>
+                <h4>Yearly cost of heart disease treatment:  $300 Billion  </h4>
+              </div>
+            </div>
+            <!-- .end .wrap -->
+          </section>
+
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/heartflow.png')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <h2>The Idea</h2>
+                <h4>Generative augmented physical (CFD) modeling from CT Scans</h4>
+                Up to now the determination of blockage involved threading a catheter from the groin up to the heart and measuring blood flow to 
+                determined whether a stent is needed to open up the coronary artery. 
+              </div>
+            </div>
+        </section>
+
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/3d-model.png')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <h2>The Team</h2>
+                <h4>Medical Doctors</h4>
+                <h4>Mechanical Engineers</h4>
+                <h4>Computer Scientists</h4>
+                <h4>NOTE: No FDA Approval Required (e.g. 510K clearance)</h4>
+              </div>
+            </div>
+        </section>
+
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/3d-model.png')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <h2>The Business Model</h2>
+                <h4>Medicare reimburses Heartflow $1,450 per test.</h4>
+                <h4>For every reimbursement Heartflow saves $4,000 in costs</h4>
+                <h4>The test is non-invasive and therefore almost ambigutous.</h4>
+                <h4>The company has partnered with SIEMENS' Marketplace and other vendors/providers.</h4>
+              </div>
+            </div>
+        </section>
+
+        <section class="bg-apple">
+          <div class="wrap">
+            <h2>What we need from AI Architecture</h2>
+            <ul class="flexblock features">   
+              <li>
+                <div>
+                  <h1>
+                      <i class="fas fa-draw-polygon fa-7x"></i>
+                    Composability
+                  </h1>
+                  pointing to microservices and atomic operations.
+                </div>
+              </li>
+              <li>
+                  <div>
+                    <h1>
+                      <i class="fas fa-cloud fa-4x"></i>
+                      Scalability & Resilience
+                    </h1>
+                    pointing to cloud-native (Kubernetes and FaaS) architectures. 
+                  </div>
+                </li>
+              <li>
+                <div>
+                  <h1>
+                      <i class="fas fa-server fa-7x"></i>
+                    Portability
+                  </h1>
+                  across workstation, training rigs, dedicated edge devices and public clouds.  
+                </div>
+              </li>
+          </div>
+        </section>
+
+          <section class="bg-apple">
+              <div class="wrap">
+                  <h2>AI Architecture Building Blocks - Deep Learning Foundation</h2>
+          <iframe width="2120" height="630" src="https://landscape.lfdl.io/format=landscape&fullscreen=yes" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </section>
+
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/ai-stack.svg')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <h2>AI Stack</h2>
+                <h4>The significance of the edge</h4>
+              </div>
+            </div>
+        </section>
+
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/acumos-E2E.svg')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <h2>The 4 pipelines (Plumbing)</h2>
+              </div>
+            </div>
+        </section>
+  
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/acumos-DP1.svg')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <h2>Data Pipeline</h2>
+              </div>
+            </div>
+        </section>
+  
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/acumos-MTP.svg')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <h2>Model Training Pipeline</h2>
+              </div>
+            </div>
+        </section>
+  
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/acumos-MEVP.svg')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <h2>Model Evaluation & Validation Pipeline</h2>
+              </div>
+            </div>
+        </section>
+  
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/acumos-SP.svg')"></span>
+            <div class="wrap">
+              <div class="content-left">
+                <h2>Serving Pipeline</h2>
+              </div>
+            </div>
+        </section>
+
+      <section class="bg-apple">
+        <div class="wrap">
+            <h2>www.acumos.org - the need for AI marketplaces</h2>
+    <iframe width="2000" height="600" src="https://docs.acumos.org/en/latest/architecture/platform_architecture.html#architecture-overview" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <section class="bg-apple slide-bottom">
+      <span class="background-center" style="background-image:url('../static/images/flats.jpeg')"></span>
+      <div class="wrap">
+        <div class="content-bottom">
+          <h2>Market Reaction</h2>
+          <h4>
+          <ul>
+            <li>The single most important success factor of heartflow.com: <strong>explainable predictions</strong></li>
+            <li>2019 market valuation - $1.5 billion </li>
+            <li>NHS adopted the approach in all its hospitals</li> 
+          </ul>
+        </h4>
+        </div>
+      </div>
+  </section>
+
+
+    <section class="bg-apple aligncenter">
+            <div class="wrap zoomIn">
+              <h1>
+                What other opportunities are there ? 
+              </h1>
+            </div>
+        </section>
+
+        <section class="bg-apple" >
+            <div class="wrap">
+              <h2>Video AI opportunities in surveillance</h2>
+              <hr>
+              <div class="grid">
+                <div class="column">
+                  <h3>Deep Learning in 2017</h3>
+                  <div class="embed">
+                    <iframe src="https://www.youtube.com/embed/CzvCiNpmVmk">
+                    </iframe>
+                   </div>
+                  <p>After spending 3200W, 2-socket CPU, 8 x GTX1080Ti, 16 x 720p cameras, algorithms are unable to pass the mirror test.</p>
+                </div>
+                <div class="column">
+                  <h3>2 year old</h3>
+                  <div class="embed">
+                    <iframe src="https://www.youtube.com/embed/Xe2pQUsCUcw">
+                    </iframe>
+                   </div>
+                   <p> She figures it out in less than 1 min.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-apple slide-bottom">
+              <span class="background-center" style="background-image:url('../static/images/soccer.png')"></span>
+              <div class="wrap">
+                <div class="content-top">
+                  <h2> Video AI opportunities in sports </h2>
+                  <h4> Lots of opportunities on improving team performance or AI-based personal trainers.</h4>
+                  <h4>$200 for 1 camera</h4>
+                  <h4>$3,000 to store in AWS S3 its video feed for 1 year</h4>
+                </div>
+              </div>
+          </section>
+
+          <section class="bg-apple aligncenter">
+              <div class="wrap zoomIn">
+                <h1>
+                  Race to Annotate
+                </h1>
+                <div class="embed">
+                    <iframe src="https://www.youtube.com/embed/lUGHImwWETc">
+                    </iframe>
+                   </div>
+              </div>
+          </section>
+
+          <section class="bg-apple slide-bottom">
+              <span class="background-center" style="background-image:url('../static/images/NVIDIA-Jetson-Xavier-Large.jpg')"></span>
+              <div class="wrap">
+                <div class="content-top"> 
+                  <h2>Video AI opportunities at the edge</h2>
+                  <ul>
+                  <li> 
+                    <h4>All cloud providers are working in capturing hybrid cloud native applications hosted on Kubernetes </h4> </li>
+                  <li>
+                    <h4>Federation, tailored to the edge hardware, security & other optimizations for edge clouds and embedded systems </h4>
+                  </li>
+                </ul>
+                </div>
+              </div>
+          </section>
+
+          <section class="bg-apple slide-bottom">
+              <span class="background-center" style="background-image:url('../static/images/congestion.jpg')"></span>
+              <div class="wrap">
+                <div class="content-left">
+                  <h2>Transportation</h2>
+                  <h4>Autonomous connected electric & shared (ACES) vehicles
+                  <ul>
+                      <li>How will EVs recharge overnight in a city full of blocks of flats? </li>
+                      <li>Simoudis' book covers the business models and technology drivers </li>
+                  </ul>
+                </h4>
+                  <h4>Congestion pricing in city centers
+                      <ul>
+                          <li>Yield Management Algorithms (Dynamic Pricing)</li>
+                          <li> License plate recognition</li>
+                          <li> Car type recognition</li>
+                          <li> Traffic Congestion recognition</li>
+                      </ul>
+                    </h4>
+                </div>
+              </div>
+          </section>
+
+        <section class="bg-apple slide-bottom">
+            <span class="background-center" style="background-image:url('../static/images/miloi-chios.jpg')"></span>
+            <div class="wrap">
+                <div class="content-right">
+                    
+                    <h1>
+                    Closing ...
+                    </h1>
+                    <h4>
+                    <ul>
+                      <li> There is no such thing as "AI startup" - you need to have a solid business model that is by itself sustained without AI </li>
+                      <li> Rethink mission critical industries - partner with local providers to make their business models work better</li>
+                      <li> Health, Transportation, Energy, Security are being disrupted not so by AI but by the  drammatic cost reduction of the software & 
+                        hardware platforms that allow entries from many, unseen before, players</li>
+                      </ul>
+                    </h4>
+                  </div>
+            </section>
+
+      <section class="bg-apple aligncenter">
+          <h3><strong>Thank you!</strong></h2>
+          <p><a href="https://twitter.com/monogioudis" title="@monogioudis on Twitter"><i class="fab fa-twitter-square fa-5x"></i></a></p>
+          @monogioudis
+        </section>
+    
+      </article>
+    </main>
+
+    <!-- Required -->
+    <script src="../static/js/webslides.js"></script>
+
+    <script>
+      window.ws = new WebSlides();
+    </script>
+
+    <!-- OPTIONAL - svg-icons.js (fontastic.me - Font Awesome as svg icons) -->
+    <!-- <script defer src="../static/js/svg-icons.js"></script> -->
+
+  </body>
+</html>
